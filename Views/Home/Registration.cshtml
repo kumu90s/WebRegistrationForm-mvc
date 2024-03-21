@@ -1,0 +1,143 @@
+﻿@model WebRegistrationForm.Model.RegistrationDto
+
+@{
+    ViewBag.Title = "Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Registration</h2>@*&nbsp;*@
+
+
+@using (Html.BeginForm("Registration", "Home", FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-lg-4">
+            @Html.LabelFor(m => m.fullName, new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(m => m.fullName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.fullName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            @Html.LabelFor(m => m.address, new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(m => m.address, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            @Html.LabelFor(m => m.stateId, new { @class = "control-label" })
+            <div>
+                @Html.DropDownListFor(m => m.stateId, ViewBag.State as SelectList, "--Select State--", new { @class = "form-control"     })
+                @Html.ValidationMessageFor(m => m.stateId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            @Html.LabelFor(m => m.districtId, new { @class = "control-label" })
+            <div>
+                @Html.DropDownListFor(m => m.districtId, ViewBag.District as SelectList, "--Select District--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.districtId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            @Html.LabelFor(m => m.municipalityId, new { @class = "control-label" })
+            <div>
+                @Html.DropDownListFor(m => m.municipalityId, ViewBag.Municipality as SelectList, "--Select municipality--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.municipalityId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            @Html.LabelFor(m => m.phone, new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(m => m.phone, new { @class = "form-control", placeholder = "9800xxxxxx" })
+                @Html.ValidationMessageFor(m => m.phone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            @Html.LabelFor(m => m.dob, new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(m => m.dob, new { @class = "form-control datepicker", @type = "date" })
+                @Html.ValidationMessageFor(m => m.dob, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            @Html.LabelFor(m => m.email, new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(m => m.email, new { @class = "form-control", placeholder = "example@example.com" })
+                @Html.ValidationMessageFor(m => m.email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            @Html.LabelFor(m => m.gender, new { @class = "control-label" })
+            <div class="col-md-12">
+                @Html.RadioButtonFor(m => m.gender, "Male")
+                Male&nbsp;&nbsp;
+                @Html.RadioButtonFor(m => m.gender, "Female")
+                Female&nbsp;&nbsp;
+                @Html.RadioButtonFor(m => m.gender, "Other")
+                Other
+            </div>
+        </div>
+    </div>
+    <div>&nbsp;
+        <div class="row">
+            @*&nbsp;*@
+            <div class="col-lg-4">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+            //// for district of selected state only
+            $("#stateId").on("change", function () {
+                debugger;
+                const stateId = $('#stateId').val();
+                $('#districtId').html("");
+                $('#districtId').append($('<option disabled selected value>--Select District--</option>'));
+                $.ajax({
+                    method: "GET",
+                    url: '@Url.Action("stateDistrict")',
+                    data: { stateId: stateId },
+                    success: function (result) {
+                        debugger;
+                        //// Append the retrieved districts to the dropdown
+                        $.each(result, function (i, district) {
+                            $("#districtId").append($('<option>', {
+                                value: district.districtId,
+                                text: district.districtName
+                            }));
+                        });
+                    }
+                });
+            });
+
+            //// for munisipality of selected district only 
+             $("#districtId").on("change", function () {
+                 debugger;
+                 const districtId = $('#districtId').val();
+                 $('#municipalityId').html("");
+                 $('#municipalityId').append($('<option disabled selected value>--Select Municipality--</option>'));
+                 $.ajax({
+                    method: "GET",
+                    url: '@Url.Action("districtMunicipality")',
+                    data: { districtId: districtId },
+                    success: function (result) {
+                        debugger;
+                        //// Append the retrieved districts to the dropdown
+                         $.each(result, function (i, item) {
+                            $("#municipalityId").append($('<option>', {
+                                value: item.municipalityId,
+                                text: item.municipalityName
+                            }));
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

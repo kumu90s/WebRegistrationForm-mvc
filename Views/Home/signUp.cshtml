@@ -1,0 +1,46 @@
+﻿@model WebRegistrationForm.Model.signUpDto
+
+@{
+    ViewBag.Title = "signUp";
+}
+
+<h2 class="gap-1">SignUp</h2>
+@using (Html.BeginForm("signUp", "Home", FormMethod.Post))
+{
+    <div class="col">
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.email, new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(m => m.email, ViewBag.email as string, new { @class = "form-control", @readonly = "readonly", @type = "email" })
+                @Html.ValidationMessageFor(m => m.email, "", new { @class = "text-danger" })
+            </div>
+        </div>&nbsp;
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.userName, new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(m => m.userName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.userName, "", new { @class = "text-danger" })
+            </div>
+        </div>&nbsp;
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.password, new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(m => m.password, new { @class = "form-control", @type = "password" })
+                @Html.ValidationMessageFor(m => m.password, "", new { @class = "text-danger" })
+            </div>
+        </div>&nbsp;
+
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.conformPassword, new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(m => m.conformPassword, new { @class = "form-control", @type = "password" })
+                @Html.ValidationMessageFor(m => m.conformPassword, "", new { @class = "text-danger" })
+            </div>
+        </div>&nbsp;
+        <div>
+            <button type="submit" , class="btn btn-info btn-lg">Submit</button>
+        </div>
+    </div>
+ }

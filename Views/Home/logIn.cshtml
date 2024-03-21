@@ -1,0 +1,70 @@
+﻿@model WebRegistrationForm.Model.logInDto
+
+@{
+    ViewBag.Title = "MY e-APP LogIn";
+}
+
+<h2>MY e-APP LogIn</h2>
+<br />
+@using (Html.BeginForm("logIn", "Home", FormMethod.Post))
+{
+    <div class="col">
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.userName, new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(m => m.userName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.userName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(m => m.password, new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(m => m.password, new { @class = "form-control", @type = "password" })
+                @Html.ValidationMessageFor(m => m.password, "", new { @class = "text-danger" })
+            </div>
+        </div><br />
+        <div>
+            <button type="submit" class="btn btn-primary">Log In</button>
+        </div>
+    </div>
+}
+<div class="modal" tabindex="-1" role="dialog" id="modalTaskComplete">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content col-lg-10 col-md-9">
+            <div class="modal-header text-center">
+                <h4 class="modal-title">My e-APP </h4>
+            </div>
+            <div class="modal-body text-center">
+                <h4 class="@(@ViewBag.TaskStatus=="00"?"text-success":"text-danger")">@ViewBag.TaskMessage</h4>
+            </div>
+            <div class="modal-footer" style="padding:8px 8px 16px 8px;margin-top:0px">
+                @if (@ViewBag.TaskStatus == "00")
+                {
+                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" data-target="#modalTaskComplete" onclick="location.href='@Url.Action("dashboard","Home")'">Okay</button>
+                }
+                else
+                {
+                    <button type="reset" class="btn btn-primary btn-sm" data-dismiss="modal" data-target="#modalTaskComplete" onclick="location.href='@Url.Action("logIn","Home")'">Okay</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            debugger;
+            var status = '@ViewBag.TaskStatus';
+            if (status != null && status != '') {
+                ////alert('@ViewBag.TaskMessage');
+                $("#modalTaskComplete").modal('show');
+            }
+            @*if(@ViewBag.TaskStatus== "00"){
+            $("#modalTaskComplete").Show();
+            }*@
+        });
+
+
+    </script>
+}
+
